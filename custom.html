@@ -1,0 +1,55 @@
+<html>
+<head>
+    <title>toy metrics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@daily-co/daily-js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+  
+    <div id="page-blocks">
+        <div id="create-a-room">
+            <button class='button' onclick="createFrameAndRoom()">create a room</button>
+            <div>
+                <input type="radio" name="customLayout" value="" checked>
+                standard Daily.co UI
+                </input>
+            </div>
+            <div>
+                <input type="radio" name="customLayout" value="true">
+                demo custom UI
+                </input>
+            </div>
+        </div>
+
+        <div id="meeting-info-row">
+            <div id="meeting-room-info" class="info">
+                room info
+            </div>
+            <div id="meeting-participants-info" class="info">
+                meeting participants
+            </div>
+            <div id="network-info" class="info">
+                network stats
+            </div>
+        </div>
+
+        <div id="buttons-row">
+            <div>
+                <button class='button green' id="join-meeting" onclick="callFrame.join({ url: ownerLink })">
+                    join meeting (as owner)
+                </button>
+                <button class='button red' id="leave-meeting" onclick="callFrame.leave()">
+                    leave meeting
+                </button>
+            </div>
+        </div>
+
+        <div id="call-frame-container">
+        </div>
+    </div>
+
+</body>
+
+</html>

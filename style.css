@@ -1,0 +1,120 @@
+.button {
+	box-shadow:inset 0px 1px 0px 0px #97c4fe;
+	background:linear-gradient(to bottom, #3d94f6 5%, #1e62d0 100%);
+	background-color:#3d94f6;
+	border-radius:6px;
+	border:1px solid #337fed;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #1570cd;
+}
+.button:hover {
+	background:linear-gradient(to bottom, #1e62d0 5%, #3d94f6 100%);
+	background-color:#1e62d0;
+}
+.button:active {
+	position:relative;
+	top:1px;
+}
+
+.red {
+  border:1px solid red;
+  background-color: red;
+  box-shadow:inset 0px 1px 0px 0px #ffcccb;
+  background:linear-gradient(to bottom, red 5%, red 100%);
+}
+
+.red:hover {
+	background:linear-gradient(to bottom, red 5%, #ffcccb 100%);
+	background-color: red;
+}
+
+.green {
+  border:1px solid green;
+  background-color: green;
+  box-shadow:inset 0px 1px 0px 0px greenyellow;
+  background:linear-gradient(to bottom, green 5%, green 100%);
+}
+
+.green:hover {
+	background:linear-gradient(to bottom, green 5%, greenyellow 100%);
+	background-color: green;
+}
+
+#page-blocks {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#page-blocks>div {
+  margin-top: 1em;
+}
+
+#create-a-room {
+  flex: none;
+}
+
+#create-a-room>div {
+  margin-top: 0.25em;
+}
+
+#meeting-info-row {
+  flex: none;
+  display: flex;
+}
+
+#meeting-info-row>div {
+  flex: auto;
+}
+
+#buttons-row {
+  flex: none;
+  display: flex;
+}
+
+#buttons-row>div {
+  flex: auto;
+}
+
+#call-frame-container {
+  flex-grow: 1;
+  /* set position and height so this is the "css container" for the iframe */
+  position: relative;
+  height: 100%;
+  min-height: 300px;
+}
+
+.info>div {
+  margin: 0.25em;
+}
+
+.info>div:nth-of-type(2) {
+  font-size: 80%;
+}
+
+.info>div>div {
+  margin: 0.25em;
+}
+
+.flex-bins {
+  display: flex;
+  flex-basis: auto;
+}
+
+.flex-bin {
+  flex-basis: auto;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
