@@ -42,7 +42,9 @@ async function createRoom() {
 	);
 
 	updateRoomInfoDisplay();
+	setInterval(getRoomInfo, 5000);
 	setInterval(updateNetworkInfoDisplay, 15000);
+	setInterval(saveRoomDataintoDB, 5000);
 }
 
 async function createFrame() {
@@ -53,7 +55,7 @@ async function createFrame() {
 
 	callFrame = window.DailyIframe.createFrame(
 		document.getElementById('call-frame-container')
-				// { customLayout, cssFile }
+		// { customLayout, cssFile }
 	);
 
 }
@@ -80,4 +82,69 @@ function updateRoomInfoDisplay() {
 async function updateNetworkInfoDisplay() {
 	let infoEl = document.getElementById('network-info'),
 		statsInfo = await callFrame.getNetworkStats();
+	infoEl.innerHTML = `
+		<div><b>network stats</b></div>
+		<div>
+		<div>
+		video send:
+		${Math.floor(statsInfo.stats.latest.videoSendBitsPerSecond / 1000)} kb/s
+		</div>
+		<div>
+		video recv:
+		${Math.floor(statsInfo.stats.latest.videoRecvBitsPerSecond / 1000)} kb/s
+		<div>
+		worst send packet loss:
+		${Math.floor(statsInfo.stats.worstVideoSendPacketLoss * 100)}%</div>
+		<div>worst recv packet loss:
+		${Math.floor(statsInfo.stats.worstVideoRecvPacketLoss * 100)}%</div>
+		</div>
+		`;
+}
+
+async function getRoomInfo() {
+	let infoEl = document.getElementById('room-info'),
+		roomInfo = await callFrame.room();
+	infoEl.innerHTML = `
+		<div><b>network stats</b></div>
+		<div>
+		<div>
+		Room ID:
+		${roomInfo.id}
+		</div>
+		<div>
+		Room name:
+		${roomInfo.name}
+		</div>
+		`;
+}
+
+async function saveRoomDataintoDB() {
+	let roomInfo = await callFrame.room();
+	let statsInfo = await callFrame.getNetworkStats();
+	let json = {};
+
+	if (localStorage) {
+		var roomId;
+		if (!localStorage['roomId']) {
+			roomId = [];
+		} else {
+			roomId = JSON.parse(localStorage['roomId']);
+		}
+
+		if (!(roomId instanceof Array)) roomId = [];
+		if (!(roomId.includes(roomInfo.id)) && roomInfo.id != null) {
+			roomId.push(roomInfo.id)
+			localStorage.setItem('roomId', JSON.stringify(roomId));
+		}
+
+		// Retrieve
+		let storageEl = document.getElementById("result");
+		storageEl.innerHTML = `
+		<div><h1> Dashboard </h1></div>
+		${localStorage.getItem("roomId")}
+		`
+	} else {
+		let storageEl = document.getElementById("result");
+		storageEl.innerHTML = `Sorry, your browser does not support Web Storage...`
+	}
 }
