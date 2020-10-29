@@ -1,0 +1,22 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>dashboard</title>
+    <script src="./node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body onload="renderBitsChart(); renderPacketChart();">
+    <h1>Dashboard</h1>
+    <button class='button' onclick="renderBitsChart(); renderPacketChart();">Refresh Charts</button>
+
+    <div class="chart-container" style="width: 600px; height: 400px">
+        <canvas id="bits"></canvas>
+    </div>
+
+    <div class="chart-container" style="width: 600px; height: 400px">
+        <canvas id="packet"></canvas>
+    </div>
+</body>
+
+</html>

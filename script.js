@@ -48,14 +48,8 @@ async function createRoom() {
 }
 
 async function createFrame() {
-	// let customLayout = !!document
-	// 	.querySelector('input[name="customLayout"]:checked')
-	// 	.value,
-	// 	cssFile = customLayout ? 'style.css' : null;
-
 	callFrame = window.DailyIframe.createFrame(
 		document.getElementById('call-frame-container')
-		// { customLayout, cssFile }
 	);
 
 }
@@ -105,7 +99,7 @@ async function getRoomInfo() {
 	let infoEl = document.getElementById('room-info'),
 		roomInfo = await callFrame.room();
 	infoEl.innerHTML = `
-		<div><b>network stats</b></div>
+		<div><b>room stats</b></div>
 		<div>
 		<div>
 		Room ID:
@@ -162,14 +156,137 @@ async function saveRoomDataintoDB() {
 		<div><h1> Dashboard </h1></div>
 		${localStorage.getItem("roomId")}
 		`
-
-		let DatastorageEl = document.getElementById("videoData");
-		DatastorageEl.innerHTML = `
-			<div><h1> Video Data </h1></div>
-				${localStorage.getItem("videoData")}
-		`
 	} else {
 		let storageEl = document.getElementById("result");
 		storageEl.innerHTML = `Sorry, your browser does not support Web Storage...`
 	};
+}
+
+
+
+// function timeConverter(UNIX_timestamp){
+//   var a = new Date(UNIX_timestamp * 1000);
+//   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+//   var year = a.getFullYear();
+//   var month = months[a.getMonth()];
+//   var date = a.getDate();
+//   var hour = a.getHours();
+//   var min = a.getMinutes();
+//   var sec = a.getSeconds();
+//   var time = date + ' ' + month + ' ' + hour + ':' + min + ':' + sec ;
+//   return time;
+// }
+
+function renderBitsChart() {
+	// console.log(localStorage.videoData)
+	let timestamp = [],
+		videoRecvBitsPerSecond = [],
+		videoSendBitsPerSecond = [],
+		backgroundColorRecv = [],
+		borderColorRecv = [];
+	backgroundColorSend = [],
+		borderColorSend = [];
+
+	for (var i = 0; i < (JSON.parse(localStorage.videoData)).length; i++) {
+		// date = timeConverter(JSON.parse(localStorage.videoData)[i]["timestamp"]);
+		// console.log(JSON.parse(localStorage.videoData)[i]["timestamp"])
+		timestamp.push(JSON.parse(localStorage.videoData)[i]["timestamp"])
+		videoRecvBitsPerSecond.push(JSON.parse(localStorage.videoData)[i]["videoRecvBitsPerSecond"]);
+		videoSendBitsPerSecond.push(JSON.parse(localStorage.videoData)[i]["videoSendBitsPerSecond"]);
+
+		backgroundColorRecv.push('rgba(54, 162, 235, 0.2)');
+		borderColorRecv.push('rgba(54, 162, 235, 1)');
+
+		backgroundColorSend.push('rgba(255, 206, 86, 0.2)');
+		borderColorSend.push('rgba(255, 206, 86, 1)');
+	}
+	var ctx = document.getElementById("bits").getContext("2d");
+	new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: timestamp,
+			datasets: [{
+				label: 'Video Recv Bits/Sec',
+				data: videoRecvBitsPerSecond,
+				backgroundColor: backgroundColorRecv,
+				borderColor: borderColorRecv,
+				borderWidth: 1
+			},
+			{
+				label: 'Video Send Bits/Sec',
+				data: videoSendBitsPerSecond,
+				backgroundColor: backgroundColorSend,
+				borderColor: borderColorSend,
+				borderWidth: 1
+			}
+			],
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	});
+
+}
+
+function renderPacketChart() {
+	// console.log(localStorage.videoData)
+	let timestamp = [],
+		videoRecvPacketLoss = [],
+		videoSendPacketLoss = [],
+		backgroundColorRecv = [],
+		borderColorRecv = [],
+		backgroundColorSend = [],
+		borderColorSend = [];
+
+	for (var i = 0; i < (JSON.parse(localStorage.videoData)).length; i++) {
+		// date = timeConverter(JSON.parse(localStorage.videoData)[i]["timestamp"]);
+		console.log(JSON.parse(localStorage.videoData)[i]["videoRecvPacketLoss"])
+		timestamp.push(JSON.parse(localStorage.videoData)[i]["timestamp"])
+		videoRecvPacketLoss.push(JSON.parse(localStorage.videoData)[i]["videoRecvPacketLoss"] * 100);
+		videoSendPacketLoss.push(JSON.parse(localStorage.videoData)[i]["videoSendPacketLoss"] * 100);
+
+		backgroundColorRecv.push('rgba(75, 192, 192, 0.2)');
+		borderColorRecv.push('rgba(75, 192, 192, 1)');
+
+		backgroundColorSend.push('rgba(153, 102, 255, 0.2)');
+		borderColorSend.push('rgba(153, 102, 255, 1)');
+	}
+	var ctx = document.getElementById("packet").getContext("2d");
+	new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: timestamp,
+			datasets: [{
+				label: 'Video Recv Pack Loss (%)',
+				data: videoRecvPacketLoss,
+				backgroundColor: backgroundColorRecv,
+				borderColor: borderColorRecv,
+				borderWidth: 1
+			},
+			{
+				label: 'Video Send Pack Loss (%)',
+				data: videoSendPacketLoss,
+				backgroundColor: backgroundColorSend,
+				borderColor: borderColorSend,
+				borderWidth: 1
+			}
+			],
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	});
+
 }
