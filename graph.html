@@ -1,22 +1,31 @@
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <title>dashboard</title>
-    <script src="./node_modules/chart.js/dist/Chart.min.js"></script>
-    <script src="script.js"></script>
+  <meta charset="utf-8" />
+  <title>dashboard</title>
+  <script src="./node_modules/chart.js/dist/Chart.min.js"></script>
+  <script src="script.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="renderBitsChart(); renderPacketChart();">
-    <h1>Dashboard</h1>
-    <button class='button' onclick="renderBitsChart(); renderPacketChart();">Refresh Charts</button>
+<!-- <body onload="createTable(); renderBitsChart(); renderPacketChart();"> -->
 
-    <div class="chart-container" style="width: 600px; height: 400px">
-        <canvas id="bits"></canvas>
-    </div>
+<body onload="createTable();">
+  <p><b>Double click on one of the Room ID above to get graph metrics</b> </p>
+  <p>(note: if there are no room IDs, then there were no video rooms created, please go back and create one)</p>
 
-    <div class="chart-container" style="width: 600px; height: 400px">
-        <canvas id="packet"></canvas>
-    </div>
+
+  <!-- <button class='button' onclick="renderBitsChart(); renderPacketChart();">Refresh Charts</button> -->
+
+  <div class="chart-container" style="width: 600px; height: 400px">
+    <canvas id="bits"></canvas>
+  </div>
+
+  <div class="chart-container" style="width: 600px; height: 400px">
+    <canvas id="packet"></canvas>
+  </div>
+
 </body>
 
 </html>

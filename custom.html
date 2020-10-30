@@ -8,45 +8,44 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<!-- <div id="result"></div> -->
-
-
-<div id="page-blocks">
-    <div id="create-a-room">
-        <button class='button' onclick="createFrameAndRoom()">create a room</button>
-    </div>
-
-    <div id="meeting-info-row">
-        <div id="meeting-room-info" class="info">
-            room info
+<body>
+    <div id="page-blocks">
+        <div id="create-a-room">
+            <button class='button' onclick="createFrameAndRoom()">create a room</button>
         </div>
-        <div id="meeting-participants-info" class="info">
-            meeting participants
-        </div>
-        <div id="network-info" class="info">
-            network stats
-        </div>
-        <div id="room-info" class="info">
-            room stats
-        </div>
-    </div>
-
-    <div id="buttons-row">
         <div>
-            <button class='button green' id="join-meeting" onclick="callFrame.join({ url: ownerLink })">
-                join meeting (as owner)
-            </button>
-            <button class='button red' id="leave-meeting" onclick="callFrame.leave()">
-                leave meeting
-            </button>
+            <a href="graph.html"><button>Dashboard</button></a>
         </div>
+
+        <div id="meeting-info-row">
+            <div id="meeting-room-info" class="info">
+                room info
+            </div>
+            <div id="meeting-participants-info" class="info">
+                meeting participants
+            </div>
+            <div id="network-info" class="info">
+                network stats
+            </div>
+            <div id="room-info" class="info">
+                room stats
+            </div>
+        </div>
+
+        <div id="buttons-row">
+            <div>
+                <button class='button green' id="join-meeting" onclick="callFrame.join({ url: ownerLink })">
+                    join meeting (as owner)
+                </button>
+                <button class='button red' id="leave-meeting" onclick="callFrame.leave()">
+                    leave meeting
+                </button>
+            </div>
+        </div>
+
+        <div id="call-frame-container"></div>
+
     </div>
-
-    <div id="call-frame-container"></div>
-
-</div>
-
-<div id="result"></div>
 </body>
 
 </html>

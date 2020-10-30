@@ -2,6 +2,8 @@ const newRoomEndpoint = 'https://fu6720epic.execute-api.us-west-2.amazonaws.com/
 	tokenEndpoint = 'https://dwdd5s2bp7.execute-api.us-west-2.amazonaws.com/default/dailyWWWApiDemoToken';
 
 
+
+
 async function createMtgRoom() {
 	try {
 		let response = await fetch(newRoomEndpoint),
@@ -43,8 +45,8 @@ async function createRoom() {
 
 	updateRoomInfoDisplay();
 	setInterval(getRoomInfo, 5000);
-	setInterval(updateNetworkInfoDisplay, 15000);
-	setInterval(saveRoomDataintoDB, 15000);
+	setInterval(updateNetworkInfoDisplay, 5000);
+	setInterval(saveRoomDataintoDB, 5000);
 }
 
 async function createFrame() {
@@ -115,11 +117,14 @@ async function getRoomInfo() {
 async function saveRoomDataintoDB() {
 	let roomInfo = await callFrame.room();
 	let statsInfo = await callFrame.getNetworkStats();
+	let participantsInfo = await callFrame.participants();
 	let json = {};
+	let pjson = {};
 
 	if (localStorage) {
 		var roomId;
 		var videoData;
+		var participants;
 		if (!localStorage['roomId']) {
 			roomId = [];
 		} else {
@@ -130,6 +135,12 @@ async function saveRoomDataintoDB() {
 			videoData = [];
 		} else {
 			videoData = JSON.parse(localStorage['videoData']);
+		}
+
+		if (!localStorage['participants']) {
+			participants = [];
+		} else {
+			participants = JSON.parse(localStorage['participants']);
 		}
 
 		if (!(roomId instanceof Array)) roomId = [];
@@ -148,7 +159,6 @@ async function saveRoomDataintoDB() {
 			videoData.push(json)
 			localStorage.setItem('videoData', JSON.stringify(videoData));
 		}
-		console.log(localStorage);
 
 		// Retrieve
 		let storageEl = document.getElementById("result");
@@ -162,7 +172,42 @@ async function saveRoomDataintoDB() {
 	};
 }
 
+function createTable() {
+	let data = JSON.parse(localStorage['roomId']),
+		table = document.createElement('table'),
+		thead = document.createElement('thead'),
+		tbody = document.createElement('tbody'),
+		th,
+		tr,
+		td;
+	console.log(data[0])
 
+	th = document.createElement('th'),
+		th.innerHTML = "Room ID";
+	table.appendChild(th);
+	table.appendChild(thead);
+	table.appendChild(tbody);
+	document.body.insertBefore(table, document.body.firstChild);
+
+	for (var i = 0; i < data.length; i++) {
+		tr = document.createElement('tr');
+		td = document.createElement('td');
+		td.innerHTML = data[i];
+		td.onclick = function () {
+			const items = document.querySelectorAll('table > tbody > tr > td');
+			items.forEach(item => {
+				item.addEventListener('click', (e) => {
+					renderBitsChart(e.target.textContent);
+					renderPacketChart(e.target.textContent);
+				}
+				)
+			})
+		}
+		tr.appendChild(td);
+
+		tbody.appendChild(tr);
+	}
+}
 
 // function timeConverter(UNIX_timestamp){
 //   var a = new Date(UNIX_timestamp * 1000);
@@ -177,7 +222,8 @@ async function saveRoomDataintoDB() {
 //   return time;
 // }
 
-function renderBitsChart() {
+
+function renderBitsChart(roomId) {
 	// console.log(localStorage.videoData)
 	let timestamp = [],
 		videoRecvBitsPerSecond = [],
@@ -190,15 +236,19 @@ function renderBitsChart() {
 	for (var i = 0; i < (JSON.parse(localStorage.videoData)).length; i++) {
 		// date = timeConverter(JSON.parse(localStorage.videoData)[i]["timestamp"]);
 		// console.log(JSON.parse(localStorage.videoData)[i]["timestamp"])
-		timestamp.push(JSON.parse(localStorage.videoData)[i]["timestamp"])
-		videoRecvBitsPerSecond.push(JSON.parse(localStorage.videoData)[i]["videoRecvBitsPerSecond"]);
-		videoSendBitsPerSecond.push(JSON.parse(localStorage.videoData)[i]["videoSendBitsPerSecond"]);
+		// console.log(JSON.parse(localStorage.videoData)[i]['roomId'])
+		// console.log('ROOM ID VARIABLE IS', roomId)
+		if (JSON.parse(localStorage.videoData)[i]['roomId'] == roomId) {
+			timestamp.push(JSON.parse(localStorage.videoData)[i]["timestamp"])
+			videoRecvBitsPerSecond.push(JSON.parse(localStorage.videoData)[i]["videoRecvBitsPerSecond"]);
+			videoSendBitsPerSecond.push(JSON.parse(localStorage.videoData)[i]["videoSendBitsPerSecond"]);
 
-		backgroundColorRecv.push('rgba(54, 162, 235, 0.2)');
-		borderColorRecv.push('rgba(54, 162, 235, 1)');
+			backgroundColorRecv.push('rgba(54, 162, 235, 0.2)');
+			borderColorRecv.push('rgba(54, 162, 235, 1)');
 
-		backgroundColorSend.push('rgba(255, 206, 86, 0.2)');
-		borderColorSend.push('rgba(255, 206, 86, 1)');
+			backgroundColorSend.push('rgba(255, 206, 86, 0.2)');
+			borderColorSend.push('rgba(255, 206, 86, 1)');
+		}
 	}
 	var ctx = document.getElementById("bits").getContext("2d");
 	new Chart(ctx, {
@@ -234,7 +284,7 @@ function renderBitsChart() {
 
 }
 
-function renderPacketChart() {
+function renderPacketChart(roomId) {
 	// console.log(localStorage.videoData)
 	let timestamp = [],
 		videoRecvPacketLoss = [],
@@ -246,16 +296,17 @@ function renderPacketChart() {
 
 	for (var i = 0; i < (JSON.parse(localStorage.videoData)).length; i++) {
 		// date = timeConverter(JSON.parse(localStorage.videoData)[i]["timestamp"]);
-		console.log(JSON.parse(localStorage.videoData)[i]["videoRecvPacketLoss"])
-		timestamp.push(JSON.parse(localStorage.videoData)[i]["timestamp"])
-		videoRecvPacketLoss.push(JSON.parse(localStorage.videoData)[i]["videoRecvPacketLoss"] * 100);
-		videoSendPacketLoss.push(JSON.parse(localStorage.videoData)[i]["videoSendPacketLoss"] * 100);
+		if ((JSON.parse(localStorage.videoData)[i]['roomId'] == roomId)) {
+			timestamp.push(JSON.parse(localStorage.videoData)[i]["timestamp"])
+			videoRecvPacketLoss.push(JSON.parse(localStorage.videoData)[i]["videoRecvPacketLoss"] * 100);
+			videoSendPacketLoss.push(JSON.parse(localStorage.videoData)[i]["videoSendPacketLoss"] * 100);
 
-		backgroundColorRecv.push('rgba(75, 192, 192, 0.2)');
-		borderColorRecv.push('rgba(75, 192, 192, 1)');
+			backgroundColorRecv.push('rgba(75, 192, 192, 0.2)');
+			borderColorRecv.push('rgba(75, 192, 192, 1)');
 
-		backgroundColorSend.push('rgba(153, 102, 255, 0.2)');
-		borderColorSend.push('rgba(153, 102, 255, 1)');
+			backgroundColorSend.push('rgba(153, 102, 255, 0.2)');
+			borderColorSend.push('rgba(153, 102, 255, 1)');
+		}
 	}
 	var ctx = document.getElementById("packet").getContext("2d");
 	new Chart(ctx, {
