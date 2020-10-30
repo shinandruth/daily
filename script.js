@@ -1,9 +1,6 @@
 const newRoomEndpoint = 'https://fu6720epic.execute-api.us-west-2.amazonaws.com/default/dailyWwwApiDemoNewCall',
 	tokenEndpoint = 'https://dwdd5s2bp7.execute-api.us-west-2.amazonaws.com/default/dailyWWWApiDemoToken';
 
-
-
-
 async function createMtgRoom() {
 	try {
 		let response = await fetch(newRoomEndpoint),
