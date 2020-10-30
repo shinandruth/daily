@@ -118,6 +118,7 @@ async function saveRoomDataintoDB() {
 	let roomInfo = await callFrame.room();
 	let statsInfo = await callFrame.getNetworkStats();
 	let participantsInfo = await callFrame.participants();
+	console.log(participantsInfo)
 	let json = {};
 	let pjson = {};
 
@@ -156,6 +157,8 @@ async function saveRoomDataintoDB() {
 			json.videoSendBitsPerSecond = Math.floor(statsInfo.stats.latest.videoSendBitsPerSecond / 1000);
 			json.videoRecvPacketLoss = Math.floor(statsInfo.stats.videoRecvPacketLoss * 100)
 			json.videoSendPacketLoss = Math.floor(statsInfo.stats.videoSendPacketLoss * 100)
+
+			pjson.roomId =
 			videoData.push(json)
 			localStorage.setItem('videoData', JSON.stringify(videoData));
 		}
@@ -180,7 +183,6 @@ function createTable() {
 		th,
 		tr,
 		td;
-	console.log(data[0])
 
 	th = document.createElement('th'),
 		th.innerHTML = "Room ID";
